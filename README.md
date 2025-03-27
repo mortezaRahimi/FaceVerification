@@ -32,12 +32,22 @@ This Android library provides a simple and efficient way to verify if a photo co
 
     Load the image from the user's storage.
 
+    ```kotlin
+     val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            bitmap.value = uriToBitmap(context, it)
+        }
+    }
+    ```
+
    
     val imageUri: Uri = // Get the image URI from the user's selection
     val imageBitmap: Bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
     ```
 
-3.  **Initialize the Verifier and Process:**
+4.  **Initialize the Verifier and Process:**
 
     Create an instance of the `PhotoVerifier` and process the image.
 
@@ -60,7 +70,39 @@ This Android library provides a simple and efficient way to verify if a photo co
 
 **PhotoVerificationResult:**
 
-The `verify` function's callback returns a `PhotoVerificationResult` which can be:
+The `verifyPhoto` function's callback returns a `PhotoVerificationResult` which can be:
+
+```kotlin
+ bitmap.value?.let {
+                Image(bitmap = it.asImageBitmap(), contentDescription = "Selected Photo")
+                PhotoVerificationCompose(bitmap = it) { result ->
+                    verificationResult.value = result
+                }
+            }
+
+
+@Composable
+fun PhotoVerificationCompose(
+    bitmap: Bitmap?,
+    onResult: (PhotoVerification.VerificationResult) -> Unit
+) {
+    val context = LocalContext.current
+    val photoVerification = remember { PhotoVerification(context) }
+
+    LaunchedEffect(bitmap) {
+        if (bitmap != null) {
+            withContext(Dispatchers.IO) {
+                val result = photoVerification.verifyPhoto(bitmap)
+                withContext(Dispatchers.Main) {
+                    onResult(result)
+                }
+            }
+        }
+    }
+
+}
+
+```
 
 * **`PhotoVerificationResult.Success(gender: Gender, isRealPerson: Boolean)`:**
     * `gender`: An enum `Gender.Male` or `Gender.Female` or `Gender.Unknown`
