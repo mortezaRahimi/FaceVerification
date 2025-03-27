@@ -1,4 +1,4 @@
-# Gender & Reality Photo Verifier (Android)
+# Gender & Reality Photo Verifier (Android + Compose)
 
 
 This Android library provides a simple and efficient way to verify if a photo contains a man, woman, or is a real person. It leverages on-device machine learning to provide fast and accurate results.
