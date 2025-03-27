@@ -42,12 +42,9 @@ This Android library provides a simple and efficient way to verify if a photo co
     }
     ```
 
-   
-    val imageUri: Uri = // Get the image URI from the user's selection
-    val imageBitmap: Bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
-    ```
 
-4.  **Initialize the Verifier and Process:**
+
+3.  **Initialize the Verifier and Process:**
 
     Create an instance of the `PhotoVerifier` and process the image.
 
