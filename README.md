@@ -42,24 +42,20 @@ This Android library provides a simple and efficient way to verify if a photo co
     Create an instance of the `PhotoVerifier` and process the image.
 
     ```kotlin
-    val verifier = PhotoVerifier(this)
-    verifier.verify(imageBitmap) { result ->
-        when (result) {
-            is PhotoVerificationResult.Success -> {
-                val gender = result.gender
-                val isRealPerson = result.isRealPerson
 
-                // Display the results
-                Log.d("PhotoVerifier", "Gender: $gender, Real Person: $isRealPerson")
+     val verificationResult =
+        remember { mutableStateOf<PhotoVerification.VerificationResult?>(null) }
 
-                //Update UI accordingly.
+        verificationResult.value?.let { result ->
+                Text("Real Person: ${result.isRealPerson}")
+                Text("Gender: ${result.gender}")
+                if (result.errorMessage != null) {
+                    Text("Error: ${result.errorMessage}")
+                }
             }
-            is PhotoVerificationResult.Error -> {
-                // Handle the error
-                Log.e("PhotoVerifier", "Error: ${result.exception.message}")
-            }
-        }
-    }
+
+    //Check sample app
+  
     ```
 
 **PhotoVerificationResult:**
